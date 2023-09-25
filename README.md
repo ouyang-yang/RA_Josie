@@ -85,3 +85,36 @@ Parents' Urban Controls &  &  &  &  & \checkmark \\ \hline \hline
 ![image](latex_table1.png)
 
 ## Appendix A.11 
+### 變數設定
+* `majority`: Majority Method (from trhee different resources)
+* `prefer_demo`: Preference for Democracy (Q30) --不考慮Q30回答不知道者
+* `prefer_demo_q`: Preference for Democracy (q24) --不考慮q24回答不知道者
+* `political`: 是否將「政治自由」列為移民考慮因素 (Q25_22) --dummy
+### 模型
+>  The p-value of a test that the average preference for Majority Method is the same in each case
+```stata
+ttest var1 == var2, unpaired
+scalar p_i = r(p)
+```
+> The confidence intervals of each of those averages at the 90% level.
+```stata
+gen category = .
+replace category = 1 if !missing(majority_us)
+replace category = 2 if !missing(majority_pol)
+replace category = 3 if !missing(majority_hkt)
+replace category = 4 if !missing(majority_ch)
+replace category = 5 if !missing(majority_nonpol)
+statsby mean_majority=r(mean) upper=r(ub) lower=r(lb), level(90) by(category) clear : ci mean majority
+```
+
+### 作圖
+#### 原始Stata作圖
+```stata
+twoway (bar 1) (bar 2) (bar 3) (bar 4) (bar 5) ///	
+       (rcap lower upper category) ///
+       (scatter mean_majority category)
+```
+![image](original_A11.png)
+
+#### 使用Grapher Editor進行調整
+![image](A11_best.png)
