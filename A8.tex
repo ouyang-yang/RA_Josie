@@ -1,0 +1,36 @@
+\documentclass[]{article}
+\usepackage{amssymb}
+\usepackage{adjustbox}
+\usepackage{booktabs}
+\usepackage{changepage}
+\begin{document}
+
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                &\multicolumn{4}{c}{Preference for Democracy}\\\cmidrule(lr){2-5}
+                &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+\hline
+Majority Method - Alternative 1&    0.243&    0.229&         &         \\
+                &  (0.046)&  (0.047)&         &         \\
+[1em]
+Majority Method - Alternative 2&         &         &    0.182&    0.166\\
+                &         &         &  (0.030)&  (0.031)\\
+\hline
+Observations    &  543&  541& 1107& 1107\\
+R-squared       &    0.054&    0.133&    0.033&    0.127\\
+\hline
+Gender          &         &$\checkmark$&         &$\checkmark$\\
+Parents' Urban Controls&         &$\checkmark$&         &$\checkmark$\\
+Country of Birth FE&         &$\checkmark$&         &$\checkmark$\\
+Mother's Country FE&         &$\checkmark$&         &$\checkmark$\\
+Father's Country FE&         &$\checkmark$&         &$\checkmark$\\
+Parents' Educational Attainment&         &$\checkmark$&         &$\checkmark$\\
+\hline\hline
+\end{tabular}
+\\
+\begin{adjustwidth}{-1cm}{-1cm}
+\begin{scriptsize}
+The table shows that the association between preference for democracy and behavior in the task is robust to different ways of defining the latter. Each column reports coefficients from a single OLS regression of the dependent variable described in the column heading on the variable(s) described in the row heading(s). An observation is an émigré from Greater China living in North America who was recruited via Facebook targeted ads to complete an online survey (see Section 2.1 and online Appendix B.1 for further details about the data collection). Preference for Democracy corresponds to the strength with which participants report preferring democracy as a system of government over a system in which the authority is unconstrained, on a 1 to 5 scale. Majority Method - Alternative 1 and Majority Method - Alternative 2 are based on a participant’s preference over a method to determine a decision for a group in the incentivized task. Alternative 1 treats ”Prefer Authority Rule” and ”Prefer Majority Rule” as missing values (i.e., it only examines participants who strongly preferred either rule or those who were indifferent). Alternative 2 holds a value of 1 when the participant strongly preferred or preferred an authority rule in the decision task, a value of 2 when she was indifferent, and a value of 3 when she preferred or strongly preferred a majority rule. Gender is an indicator that equals one if the respondent reports identifying as a female, 0 otherwise. Country of Birth FE, Mother Country FE, and Father Country FE correspond to fixed effects for the respondent’s, her mother’s, and her father’s countries of birth, respectively. Parents’ Educational Attainment corresponds to indicators for whether each parent completed high school or more. Parents’ Urban Controls corresponds to indicators for whether each parent came from an urban background. Robust standard errors are in parenthesis.
+\end{scriptsize}
+\end{adjustwidth}
+\end{document}
