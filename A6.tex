@@ -1,0 +1,37 @@
+\documentclass[]{article}
+\usepackage{amssymb}
+\usepackage{adjustbox}
+\usepackage{booktabs}
+\usepackage{changepage}
+\begin{document}
+
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                &\multicolumn{4}{c}{Majority Method}    \\\cmidrule(lr){2-5}
+                &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+\hline
+Skilled Authority - Alternative 1&   -0.150&   -0.129&         &         \\
+                &  (0.038)&  (0.038)&         &         \\
+[1em]
+Skilled Authority - Alternative 2&         &         &   -0.159&   -0.136\\
+                &         &         &  (0.033)&  (0.033)\\
+\hline
+Observations    &  817&  816& 1107& 1107\\
+R-squared       &    0.022&    0.067&    0.025&    0.068\\
+\hline
+Gender          &         &$\checkmark$&         &$\checkmark$\\
+Parents' Urban Controls&         &$\checkmark$&         &$\checkmark$\\
+Country of Birth FE&         &$\checkmark$&         &$\checkmark$\\
+Mother's Country FE&         &$\checkmark$&         &$\checkmark$\\
+Father's Country FE&         &$\checkmark$&         &$\checkmark$\\
+Parents' Educational Attainment&         &$\checkmark$&         &$\checkmark$\\
+\hline\hline        
+\end{tabular}
+\\
+\begin{adjustwidth}{-1cm}{-1cm}            
+    \begin{scriptsize}   
+    The table shows that the association between behavior in the decision task and beliefs about the competence of the authority is robust to different definitions of the latter. Each column reports standardized coefficient from a single OLS regression of the dependent variable described in the column heading on the variable(s) described in the row heading(s). An observation is an émigré from Greater China living in North America who was recruited via Facebook targeted ads to complete an online survey (see Section I.B and online Appendix B.1 for further details about the data collection). Majority Method is the preference over a method to assign a decision for a group in the incentivized task, with one corresponding to a strong preference for a decision by an authority designated by the experimenter, and 5 corresponding to a strong preference for majority rule.  Skilled Authority -Alternative 1 and Skilled Authority - Alternative 2 are based on a participant's reported belief in the likelihood that the authority in the task would be skilled, on a 0-5 scale; Alternative 1 defines 0 as a missing, whereas Alternative 2 inputs a value of 3 to respondents who selected a 0. Gender is an indicator that equals one if the respondent reports identifying as a female, 0 otherwise. Country of Birth FE, Mother Country FE, and Father Country FE correspond to fixed effects for the respondent's, her mother's, and her fathers countries of birth, respectively. Parents' Educational Attainment corresponds to indicators for whether each parent completed high school or more. Parents' Urban Controls corresponds to indicators for whether each parent came from an urban background. Robust standard errors are in parenthesis.
+    \end{scriptsize} 
+\end{adjustwidth}
+
+\end{document}

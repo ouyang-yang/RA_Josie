@@ -1,0 +1,30 @@
+\documentclass[]{article}
+\usepackage{amssymb}
+\usepackage{adjustbox}
+\usepackage{booktabs}
+\begin{document}
+
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                &\multicolumn{4}{c}{Preference for Democracy}\\\cmidrule(lr){2-5}
+                &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+\hline
+Majority Method       &    0.117&    0.112&    0.113&    0.117\\
+                &  (0.055)&  (0.055)&  (0.055)&  (0.054)\\
+\hline
+Observations    &  491&  491&  491&  491\\
+R-squared       &    0.014&    0.016&    0.022&    0.044\\
+\hline
+Gender          &         &$\checkmark$&$\checkmark$&$\checkmark$\\
+Region of Birth FE&         &         &$\checkmark$&$\checkmark$\\
+Father's Continent of Birth FE&         &         &         &$\checkmark$\\
+\hline\hline        
+\end{tabular}            
+\\
+\begin{adjustwidth}{-1cm}{-1cm}             
+    \begin{scriptsize}        
+    The table shows that behavior in the decision task robustly predicts preference for democracy for a representative sample of the US. Each column reports standardized coefficient from a single OLS regression of the dependent variable described in the column heading on the variable(s) described in the row heading(s). An observation is a respondent in the US who was recruited via Prolific to ensure a representative sample from the country (see Section I.B and online Appendix B.1 for further details about the data collection). Preference for Democracy corresponds to the strength with which participants report preferring democracy as a system of government over a system in which the authority is unconstrained, on a 1 to 5 scale. Majority Method is the preference over a method to assign a decision for a group in the incentivized task, with one corresponding to a strong preference for a decision by an authority designated by the experimenter, and 5 corresponding to a strong preference for majority rule. Gender is an indicator that equals one if the respondent reports identifying as a female, 0 otherwise. Region of Birth FE corresponds to fixed effects for whether the respondent was born in the Northeast, Atlantic Region, South, Mid-West, or West in the US. Father's Continent of Birth FE corresponds to fixed effects for whether the father was born in the US, in the Americas outside the US, Africa and the Middle East, Europe, or Asia. Robust standard errors are in parenthesis.        
+    \end{scriptsize} 
+\end{adjustwidth}
+
+\end{document}
