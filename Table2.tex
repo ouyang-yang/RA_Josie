@@ -1,0 +1,50 @@
+\documentclass[]{article}
+\usepackage{amssymb}
+\usepackage{adjustbox}
+\usepackage{booktabs}
+\usepackage{changepage}
+
+\begin{document}
+
+\begin{table}
+\begin{adjustbox}{width=\columnwidth,center}
+{\begin{tabular}{l*{6}{c}} \hline \hline
+ & \multicolumn{2}{c}\textbf{Majority Method} & \multicolumn{2}{c}\textbf{Preference for Democracy} & \multicolumn{2}{c} \textbf{Skilled Authority} \\
+&\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)} \\ 
+ \cmidrule(r){2-3}\cmidrule(l){4-5} \cmidrule(l){6-7}  
+\textbf{\underline{Panel A}} & & & & & &  \\
+Skilled Authority&   -0.257&   -0.231&   -0.148&   -0.128&  & \\
+                &  (0.030)&  (0.031)&  (0.030)&  (0.030)&  & \\
+R-squared       &    0.066&    0.101&    0.022&    0.117&  & \\
+\hline \\
+\textbf{\underline{Panel B}} & & & & & &  \\
+Authority Treatment&    0.013&    0.015&    0.041&    0.022&    0.207&    0.203\\
+                &  (0.060)&  (0.060)&  (0.060)&  (0.058)&  (0.060)&  (0.060)\\
+R-squared       &    0.000&    0.050&    0.000&    0.101&    0.011&    0.046\\
+\hline \\ 
+\textbf{\underline {Panel C}} & & & & & &  \\
+Skilled Authority Residual&   -0.260&   -0.235&   -0.152&   -0.130&         &         \\
+                &  (0.030)&  (0.031)&  (0.030)&  (0.030)&         &         \\
+R-squared       &    0.067&    0.102&    0.023&    0.117&    1.000&    1.000\\
+\hline
+Observations    & 1107& 1107& 1107& 1107& 1107& 1107\\
+\hline
+Gender          &         &$\checkmark$&         &$\checkmark$&         &$\checkmark$\\
+Country of Birth FE&         &$\checkmark$&       &$\checkmark$&         &$\checkmark$\\
+Mother's Country FE&         &$\checkmark$&         &$\checkmark$&         &$\checkmark$\\
+Father's Country FE&         &$\checkmark$&         &$\checkmark$&         &$\checkmark$\\
+Parents' Educational Attainment&         &$\checkmark$&         &$\checkmark$&         &$\checkmark$\\
+Parents' Urban Controls&         &$\checkmark$&         &$\checkmark$&         &$\checkmark$\\
+        \hline\hline        
+\end{tabular}}
+\end{adjustbox}
+\\
+\begin{adjustwidth}{-1cm}{-1cm}            
+    \begin{scriptsize}      
+        Each panel-column reports results from a single OLS regression of the dependent variable described in the column heading on the variable(s) described in the row heading(s). An observation is an émigré from Greater China living in North America (see Section I.B and online Appendix B.1 for further details about the data collection). Preference for Democracy corresponds to the strength with which participants report preferring democracy as a system of government over a system in which the authority is unconstrained, on a 1-5 scale. Majority Method is the preference over a method to assign a decision for a group in the incentivized task, with one corresponding to a strong preference for a decision by an authority designated by the experimenter, and 5 corresponding to a strong preference for majority rule. Authority Treatment is an indicator that equals 1 if, before the decision task, the respondent was shown a prompt suggesting that a skilled participant could be selected as an authority in the decision task. Skilled Authority is a participant's reported belief in the likelihood that the authority in the task would be skilled, on a 0-5 scale. Skilled Authority Residual is the residual of regression in Panel B, Column 5. Gender is an indicator that equals one if the respondent reports identifying as a female, 0 otherwise. Country of Birth FE, Mother's Country FE, and Father's Country FE correspond to fixed effects for the respondent's, her mother's, and her father’s countries of birth, respectively. Parents' Educational Attainment corresponds to indicators for whether each parent completed secondary education or more. Parents' Urban Controls corresponds to indicators for whether each parent came from an urban background. Robust standard errors are in parenthesis.           
+    \end{scriptsize} 
+\end{adjustwidth} 
+
+\end{table}
+
+\end{document}
