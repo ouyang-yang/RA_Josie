@@ -236,10 +236,9 @@ replace children = real(您有几个孩子) if fromWenjuanxing == 1
 replace children = real(q13) if fromProlific == 1
 label var children "Number of Children"
 
-* Migrated Within China During Childhood(Migrated Within China During Childhood)
+* Migrated from Rural to Urban within China During Childhood
 gen MigrChina = 0 if fromWenjuanxing == 1
 replace MigrChina = 1 if 请问您主要在农村还是城市长大=="我出生在农村地区，但是在我成长的过程中，我与家人搬到了城市地区"
-replace MigrChina = 1 if 请问您主要在农村还是城市长大=="我出生在城市地区，但是在我成长的过程中，我与家人搬到了农村地区"
 
 * Time Duration (sec)
 gen time = 0 if fromFB == 1 | fromWenjuanxing == 1 | fromProlific == 1
@@ -253,6 +252,7 @@ replace math = 2 if (Q16=="2" & fromFB == 1)
 replace math = 3 if (Q16=="3" & fromFB == 1)
 replace math = 4 if (Q16=="4" & fromFB == 1)
 replace math = 5 if (Q16=="5 = 程度最高" & fromFB == 1)
+label var math "Math Ability"
 
 * Self-reported Trust
 gen trust = 0 if fromFB == 1| fromWenjuanxing == 1 | fromProlific == 1

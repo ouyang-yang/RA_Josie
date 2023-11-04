@@ -324,7 +324,7 @@ set scheme plotplainblind
 catplot MajMethod, over(Category, label(labsize(2)) relabel(2 "Emigres from Mainland China - Political" 5 "Emigres from Mainland China - Non Political")) stack asyvars percent(Category) blabel(bar, size(1) position(center) format(%4.1f)) legend(label(1 "Strongly prefer choice by authority") label(2 "Prefer choice by authority") label(3 "No preference") label(4 "Prefer choice by majority") label(5 "Strongly prefer choice by majority") rows(5) size(vsmall)) ytitle("Percentage", size(small)) l1title("") 
 *____________________________________________________________________*
 
-*** Table 3 ***
+*** Table 3:re***
 clear all
 cd "C:\Users\mayda\Python practice\RA_Josie" 
 use theData.dta, clear // "theData.dta"
@@ -365,7 +365,7 @@ est restore regA_5
 eststo regA_6:reg MajMethod currentUni, r
 est restore regA_6
 
-esttab regA_1 regA_2 regA_3 regA_4 regA_5 regA_6 using Table3.tex, ///
+esttab regA_1 regA_2 regA_3 regA_4 regA_5 regA_6 using Table3RE.tex, ///
 prehead("\begin{table} \scalebox{0.85}{ \begin{tabular}{l*{6}{c}} \hline \hline") ///
 posthead("\hline \\ \textbf{\underline {Panel A: Individual Characteristics}}&&&&&&& \\ & \multicolumn{6}{c}{Dependent Variable: Majority Method} \\ \cmidrule(lr){2-7} \\") ///
 fragment ///
@@ -377,7 +377,7 @@ eststo clear
 
 ** Panel B **
 label var UrbanBackground "Urban Background"
-label var MigrChina "Migrated Internally Within China in Childhood"
+label var MigrChina "Migrated from Rural to Urban within China During Childhood"
 
 eststo regB_1: reg MajMethod UrbanBackground, cluster(mo_province)
 est restore regB_1
@@ -392,12 +392,12 @@ est restore regB_5
 eststo regB_6: reg MajMethod FDI_GDP_92_19, cluster(mo_province)
 est restore regB_6
 
-esttab regB_1 regB_2 regB_3 regB_4 regB_5 regB_6 using Table3.tex, ///
+esttab regB_1 regB_2 regB_3 regB_4 regB_5 regB_6 using Table3RE.tex, ///
 posthead("\hline \\ \textbf{\underline {Panel B: Economic Experiences}}&&&&&&& \\ & \multicolumn{6}{c}{Dependent Variable: Majority Method} \\ \cmidrule(lr){2-7} \\") ///
 fragment ///
-stats(r2 N , labels("R-squared" "Observations") ) ///
-nostar nonotes b(3) se(3) append label nomtitle nonumbers ///
-nomtitle compress collabels(none) nodepvars noconstant ///
+stats(N r2, labels("Observations" "R-squared") ) ///
+notes b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) append label nomtitle ///
+compress collabels(none) nodepvars ///
 prefoot("\hline") ///
 postfoot( ///
        \hline\hline ///
@@ -962,3 +962,224 @@ twoway (bar MajMethod Category if Category==1, barwidth(0.9)) ///
 	   ytitle("Mean of Majority Method") xtitle("") subtitle("") ///
 	   note({`=string(p1,"%5.4f")'} {`=string(p2,"%5.4f")'} {`=string(p3,"%5.4f")'} {`=string(p4,"%5.4f")'}, position(6) size(vsmall)) ///
 	   yscale(range(3.4 4.4)) ylabel(, angle(horizontal)) xlabel(none) 
+	   
+*** Table 2:re ***
+/*
+In this table, I manually delete the decimals of Observations and do some typesetting using overleaf.
+In overleaf, I do several things:
+	1. I use the packages: amssymb, adjustbox and booktabs.
+	2. I manually turn "Standard errors in parentheses" into "Robust standard errors in parentheses". Since I do use robust r2: vce(r).
+	3. I manually adjust the placement of Constant.
+	4. I manually add a "[1em]" above `Constant' and a "[1em]" below `Constant.
+*/
+clear all
+cd "C:\Users\mayda\Python practice\RA_Josie" 
+use theData.dta, clear // "theData.dta"
+keep if fromFB==1 //1107 observations
+
+global ParentsUrban "FUrban MUrban"
+global ParentsEducation "FEdu MEdu" 
+
+//standardize the 2 variables
+local Standard "SkilledAuthority MajMethod"
+
+foreach var of local Standard{
+	egen std_`var'=std(`var') if Q30 != "不知道"
+	replace `var'=std_`var' 
+	drop std_`var'
+}
+gen skAuth_math = SkilledAuthority * math
+gen skAuth_BA = SkilledAuthority * BA
+gen skAuth_highEdu = SkilledAuthority * highEdu
+
+**Panel A**
+
+eststo regA_1: reghdfe MajMethod math gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_1
+estadd ysumm
+estadd local gender "$\checkmark$":regA_1
+estadd local CountryBirth "$\checkmark$":regA_1
+estadd local MotherCountry "$\checkmark$":regA_1
+estadd local FatherCountry "$\checkmark$":regA_1
+estadd local ParentsEducation "$\checkmark$":regA_1
+estadd local ParentsUrban "$\checkmark$":regA_1
+
+eststo regA_2: reghdfe MajMethod BA gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_2
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_2
+estadd local CountryBirth "$\checkmark$":regA_2
+estadd local MotherCountry "$\checkmark$":regA_2
+estadd local FatherCountry "$\checkmark$":regA_2
+estadd local ParentsEducation "$\checkmark$":regA_2
+estadd local ParentsUrban "$\checkmark$":regA_2
+
+eststo regA_3: reghdfe MajMethod highEdu gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_3
+estadd ysumm
+estadd local gender "$\checkmark$":regA_3
+estadd local CountryBirth "$\checkmark$":regA_3
+estadd local MotherCountry "$\checkmark$":regA_3
+estadd local FatherCountry "$\checkmark$":regA_3
+estadd local ParentsEducation "$\checkmark$":regA_3
+estadd local ParentsUrban "$\checkmark$":regA_3
+
+eststo regA_4: reghdfe MajMethod math skAuth_math SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_4
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_4
+estadd local CountryBirth "$\checkmark$":regA_4
+estadd local MotherCountry "$\checkmark$":regA_4
+estadd local FatherCountry "$\checkmark$":regA_4
+estadd local ParentsEducation "$\checkmark$":regA_4
+estadd local ParentsUrban "$\checkmark$":regA_4
+
+
+eststo regA_5: reghdfe MajMethod BA skAuth_BA SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_5
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_5
+estadd local CountryBirth "$\checkmark$":regA_5
+estadd local MotherCountry "$\checkmark$":regA_5
+estadd local FatherCountry "$\checkmark$":regA_5
+estadd local ParentsEducation "$\checkmark$":regA_5
+estadd local ParentsUrban "$\checkmark$":regA_5
+
+eststo regA_6: reghdfe MajMethod highEdu skAuth_highEdu SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_6
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_6
+estadd local CountryBirth "$\checkmark$":regA_6
+estadd local MotherCountry "$\checkmark$":regA_6
+estadd local FatherCountry "$\checkmark$":regA_6
+estadd local ParentsEducation "$\checkmark$":regA_6
+estadd local ParentsUrban "$\checkmark$":regA_6
+
+label var MajMethod "Majority Method"
+label var skAuth_math "Skilled Authority x Math Ability"
+label var skAuth_BA "Skilled Authority x Completed BA or More"
+label var skAuth_highEdu "Skilled Authority x Completed High School or More"
+
+estfe regA_1 regA_2 regA_3 regA_4 regA_5 regA_6
+esttab regA_1 regA_2 regA_3 regA_4 regA_5 regA_6 using Table2RE.tex, ///
+	   replace label ///
+	   keep(_cons math BA skAuth_math skAuth_BA highEdu skAuth_highEdu SkilledAuthority) nomtitle compress collabels(none) ///
+	   notes  b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///
+	   stats(gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban N r2, labels("Gender"  "Country of Birth FE" "Mother's Country FE" "Father's Country FE" "Parents' Educational Attainment" "Parents' Urban Controls" "Observations" "R-squared" ) ) ///
+	   order(math BA skAuth_math skAuth_BA highEdu skAuth_highEdu SkilledAuthority Gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban _cons) ///
+	   mgroups("Majority Method", pattern(1 0 0 0 0 0) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span}))
+	   
+*** Table 1:re ***
+/*
+In this table, I manually delete the decimals of Observations and do some typesetting using overleaf.
+In overleaf, I do several things:
+	1. I use the packages: amssymb, adjustbox and booktabs.
+	2. I manually turn "Standard errors in parentheses" into "Robust standard errors in parentheses". Since I do use robust r2: vce(r).
+	3. I manually adjust the placement of Constant.
+	4. I manually add a "[1em]" above `Constant' and a "[1em]" below `Constant.
+*/
+clear all
+cd "C:\Users\mayda\Python practice\RA_Josie" 
+use theData.dta, clear // "theData.dta"
+keep if fromFB==1 //1107 observations
+
+global ParentsUrban "FUrban MUrban"
+global ParentsEducation "FEdu MEdu" 
+
+//standardize the 2 variables
+local Standard "PreferDemo MajMethod"
+
+foreach var of local Standard{
+	egen std_`var'=std(`var')
+	replace `var'=std_`var'
+}
+
+eststo reg4b_1: reghdfe PreferDemo MajMethod gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore reg4b_1
+estadd ysumm
+estadd local gender "$\checkmark$":reg4b_1
+estadd local CountryBirth "$\checkmark$":reg4b_1
+estadd local MotherCountry "$\checkmark$":reg4b_1
+estadd local FatherCountry "$\checkmark$":reg4b_1
+estadd local ParentsEducation "$\checkmark$":reg4b_1
+estadd local ParentsUrban "$\checkmark$":reg4b_1
+
+eststo reg4b_2: reghdfe PreferDemo MajMethod math gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+estadd ysumm
+estadd local gender "$\checkmark$":reg4b_2
+estadd local CountryBirth "$\checkmark$":reg4b_2
+estadd local MotherCountry "$\checkmark$":reg4b_2
+estadd local FatherCountry "$\checkmark$":reg4b_2
+estadd local ParentsEducation "$\checkmark$":reg4b_2
+estadd local ParentsUrban "$\checkmark$":reg4b_2
+
+eststo reg4b_3: reghdfe PreferDemo MajMethod BA gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore reg4b_3
+estadd ysumm
+estadd local gender "$\checkmark$":reg4b_3
+estadd local CountryBirth "$\checkmark$":reg4b_3
+estadd local MotherCountry "$\checkmark$":reg4b_3
+estadd local FatherCountry "$\checkmark$":reg4b_3
+estadd local ParentsEducation "$\checkmark$":reg4b_3
+estadd local ParentsUrban "$\checkmark$":reg4b_3
+
+eststo reg4b_4: reghdfe PreferDemo MajMethod highEdu gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore reg4b_4
+estadd ysumm
+estadd local gender "$\checkmark$":reg4b_4
+estadd local CountryBirth "$\checkmark$":reg4b_4
+estadd local MotherCountry "$\checkmark$":reg4b_4
+estadd local FatherCountry "$\checkmark$":reg4b_4
+estadd local ParentsEducation "$\checkmark$":reg4b_4
+estadd local ParentsUrban "$\checkmark$":reg4b_4
+
+label var MajMethod "Majority Method"
+estfe reg4b_1 reg4b_2 reg4b_3 reg4b_4
+esttab reg4b_1 reg4b_2 reg4b_3 reg4b_4 using Table1RE.tex, ///
+	   replace label /// 
+	   keep(MajMethod math BA highEdu _cons) nomtitle compress collabels(none) ///
+	   notes b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///
+	   stats(gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban N r2, labels("Gender"  "Country of Birth FE" "Mother's Country FE" "Father's Country FE" "Parents' Educational Attainment" "Parents' Urban Controls" "Observations" "R-squared" )) ///
+	   order(MajMethod math BA highEdu Gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban _cons) ///
+	   mgroups("Preference for Democracy", pattern(1 0 0 0) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span}))
+	   
+	   
+*** Table 3:re***
+clear all
+cd "C:\Users\mayda\Python practice\RA_Josie" 
+use theData.dta, clear // "theData.dta"
+
+keep if fromWenjuanxing == 1 //489 observations
+
+//standardize the variables
+local Standard "MajMethod"
+
+foreach var of local Standard{
+	egen std_`var'=std(`var')
+	replace `var'=std_`var' 
+}
+
+
+** Panel B **
+label var UrbanBackground "Urban Background"
+label var MigrChina "Migrated from Rural to Urban within China During Childhood"
+
+eststo regB_1: reg MajMethod UrbanBackground, cluster(mo_province)
+est restore regB_1
+eststo regB_2: reg MajMethod MigrChina, cluster(mo_province)
+est restore regB_2
+eststo regB_3: reg MajMethod GDP_growth_92_19_mo, cluster(mo_province)
+est restore regB_3
+eststo regB_4: reg MajMethod M_GDP_92_19_mo, cluster(mo_province)
+est restore regB_4
+eststo regB_5: reg MajMethod X_GDP_92_19_mo, cluster(mo_province)
+est restore regB_5
+eststo regB_6: reg MajMethod FDI_GDP_92_19, cluster(mo_province)
+est restore regB_6
+
+esttab regB_1 regB_2 regB_3 regB_4 regB_5 regB_6 using Table3ver2.tex, ///
+posthead("\hline \\ \textbf{\underline {Panel B: Economic Experiences}}&&&&&&& \\ & \multicolumn{6}{c}{Dependent Variable: Majority Method} \\ \cmidrule(lr){2-7} \\") ///
+replace label nomtitle compress collabels(none) ///
+notes b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///
+stats(N r2, labels("Observations" "R-squared"))
+
