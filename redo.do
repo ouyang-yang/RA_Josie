@@ -1135,7 +1135,7 @@ estadd local ParentsUrban "$\checkmark$":reg4b_4
 
 label var MajMethod "Majority Method"
 estfe reg4b_1 reg4b_2 reg4b_3 reg4b_4
-esttab reg4b_1 reg4b_2 reg4b_3 reg4b_4 using Table1RE.tex, ///
+esttab reg4b_1 reg4b_2 reg4b_3 reg4b_4 using Table1RE_std.tex, ///
 	   replace label /// 
 	   keep(MajMethod math BA highEdu) nomtitle noconstant compress collabels(none) ///
 	   notes b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///
@@ -1183,3 +1183,212 @@ replace label nomtitle compress collabels(none) ///
 notes b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///
 stats(N r2, labels("Observations" "R-squared"))
 
+*** Table 2_1 RE: First std, and then gen intersection term ***
+/*
+In this table, I manually delete the decimals of Observations and do some typesetting using overleaf.
+In overleaf, I do several things:
+	1. I use the packages: amssymb, adjustbox and booktabs.
+	2. I manually turn "Standard errors in parentheses" into "Robust standard errors in parentheses". Since I do use robust r2: vce(r).
+*/
+clear all
+cd "C:\Users\mayda\Python practice\RA_Josie" 
+use theData.dta, clear // "theData.dta"
+keep if fromFB==1 //1107 observations
+
+global ParentsUrban "FUrban MUrban"
+global ParentsEducation "FEdu MEdu" 
+
+//standardize the 5 variables
+local Standard "SkilledAuthority MajMethod math BA highEdu"
+
+foreach var of local Standard{
+	egen std_`var'=std(`var') if Q30 != "不知道"
+	replace `var'=std_`var' 
+	drop std_`var'
+}
+gen skAuth_math = SkilledAuthority * math
+gen skAuth_BA = SkilledAuthority * BA
+gen skAuth_highEdu = SkilledAuthority * highEdu
+
+**Panel A**
+
+eststo regA_1: reghdfe MajMethod math gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_1
+estadd ysumm
+estadd local gender "$\checkmark$":regA_1
+estadd local CountryBirth "$\checkmark$":regA_1
+estadd local MotherCountry "$\checkmark$":regA_1
+estadd local FatherCountry "$\checkmark$":regA_1
+estadd local ParentsEducation "$\checkmark$":regA_1
+estadd local ParentsUrban "$\checkmark$":regA_1
+
+eststo regA_2: reghdfe MajMethod BA gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_2
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_2
+estadd local CountryBirth "$\checkmark$":regA_2
+estadd local MotherCountry "$\checkmark$":regA_2
+estadd local FatherCountry "$\checkmark$":regA_2
+estadd local ParentsEducation "$\checkmark$":regA_2
+estadd local ParentsUrban "$\checkmark$":regA_2
+
+eststo regA_3: reghdfe MajMethod highEdu gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_3
+estadd ysumm
+estadd local gender "$\checkmark$":regA_3
+estadd local CountryBirth "$\checkmark$":regA_3
+estadd local MotherCountry "$\checkmark$":regA_3
+estadd local FatherCountry "$\checkmark$":regA_3
+estadd local ParentsEducation "$\checkmark$":regA_3
+estadd local ParentsUrban "$\checkmark$":regA_3
+
+eststo regA_4: reghdfe MajMethod math skAuth_math SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_4
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_4
+estadd local CountryBirth "$\checkmark$":regA_4
+estadd local MotherCountry "$\checkmark$":regA_4
+estadd local FatherCountry "$\checkmark$":regA_4
+estadd local ParentsEducation "$\checkmark$":regA_4
+estadd local ParentsUrban "$\checkmark$":regA_4
+
+
+eststo regA_5: reghdfe MajMethod BA skAuth_BA SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_5
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_5
+estadd local CountryBirth "$\checkmark$":regA_5
+estadd local MotherCountry "$\checkmark$":regA_5
+estadd local FatherCountry "$\checkmark$":regA_5
+estadd local ParentsEducation "$\checkmark$":regA_5
+estadd local ParentsUrban "$\checkmark$":regA_5
+
+eststo regA_6: reghdfe MajMethod highEdu skAuth_highEdu SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_6
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_6
+estadd local CountryBirth "$\checkmark$":regA_6
+estadd local MotherCountry "$\checkmark$":regA_6
+estadd local FatherCountry "$\checkmark$":regA_6
+estadd local ParentsEducation "$\checkmark$":regA_6
+estadd local ParentsUrban "$\checkmark$":regA_6
+
+label var MajMethod "Majority Method"
+label var skAuth_math "Skilled Authority x Math Ability"
+label var skAuth_BA "Skilled Authority x Completed BA or More"
+label var skAuth_highEdu "Skilled Authority x Completed High School or More"
+
+estfe regA_1 regA_2 regA_3 regA_4 regA_5 regA_6
+esttab regA_1 regA_2 regA_3 regA_4 regA_5 regA_6 using Table2RE_std_inter.tex, ///
+	   replace label ///
+	   keep(math BA skAuth_math skAuth_BA highEdu skAuth_highEdu SkilledAuthority) noconstant nomtitle compress collabels(none) ///
+	   notes  b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///
+	   stats(gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban N r2, labels("Gender"  "Country of Birth FE" "Mother's Country FE" "Father's Country FE" "Parents' Educational Attainment" "Parents' Urban Controls" "Observations" "R-squared" ) ) ///
+	   order(math BA skAuth_math skAuth_BA highEdu skAuth_highEdu SkilledAuthority Gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban) ///
+	   mgroups("Majority Method", pattern(1 0 0 0 0 0) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span}))
+	   
+*** Table 2_2 RE: First gen intersection term, and then std. ***
+/*
+In this table, I manually delete the decimals of Observations and do some typesetting using overleaf.
+In overleaf, I do several things:
+	1. I use the packages: amssymb, adjustbox and booktabs.
+	2. I manually turn "Standard errors in parentheses" into "Robust standard errors in parentheses". Since I do use robust r2: vce(r).
+*/
+clear all
+cd "C:\Users\mayda\Python practice\RA_Josie" 
+use theData.dta, clear // "theData.dta"
+keep if fromFB==1 //1107 observations
+
+global ParentsUrban "FUrban MUrban"
+global ParentsEducation "FEdu MEdu" 
+
+gen skAuth_math = SkilledAuthority * math
+gen skAuth_BA = SkilledAuthority * BA
+gen skAuth_highEdu = SkilledAuthority * highEdu
+
+//standardize the 8 variables
+local Standard "SkilledAuthority MajMethod math BA highEdu skAuth_math skAuth_BA skAuth_highEdu"
+
+foreach var of local Standard{
+	egen std_`var'=std(`var') if Q30 != "不知道"
+	replace `var'=std_`var' 
+	drop std_`var'
+}
+
+
+**Panel A**
+
+eststo regA_1: reghdfe MajMethod math gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_1
+estadd ysumm
+estadd local gender "$\checkmark$":regA_1
+estadd local CountryBirth "$\checkmark$":regA_1
+estadd local MotherCountry "$\checkmark$":regA_1
+estadd local FatherCountry "$\checkmark$":regA_1
+estadd local ParentsEducation "$\checkmark$":regA_1
+estadd local ParentsUrban "$\checkmark$":regA_1
+
+eststo regA_2: reghdfe MajMethod BA gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_2
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_2
+estadd local CountryBirth "$\checkmark$":regA_2
+estadd local MotherCountry "$\checkmark$":regA_2
+estadd local FatherCountry "$\checkmark$":regA_2
+estadd local ParentsEducation "$\checkmark$":regA_2
+estadd local ParentsUrban "$\checkmark$":regA_2
+
+eststo regA_3: reghdfe MajMethod highEdu gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_3
+estadd ysumm
+estadd local gender "$\checkmark$":regA_3
+estadd local CountryBirth "$\checkmark$":regA_3
+estadd local MotherCountry "$\checkmark$":regA_3
+estadd local FatherCountry "$\checkmark$":regA_3
+estadd local ParentsEducation "$\checkmark$":regA_3
+estadd local ParentsUrban "$\checkmark$":regA_3
+
+eststo regA_4: reghdfe MajMethod math skAuth_math SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_4
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_4
+estadd local CountryBirth "$\checkmark$":regA_4
+estadd local MotherCountry "$\checkmark$":regA_4
+estadd local FatherCountry "$\checkmark$":regA_4
+estadd local ParentsEducation "$\checkmark$":regA_4
+estadd local ParentsUrban "$\checkmark$":regA_4
+
+eststo regA_5: reghdfe MajMethod BA skAuth_BA SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_5
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_5
+estadd local CountryBirth "$\checkmark$":regA_5
+estadd local MotherCountry "$\checkmark$":regA_5
+estadd local FatherCountry "$\checkmark$":regA_5
+estadd local ParentsEducation "$\checkmark$":regA_5
+estadd local ParentsUrban "$\checkmark$":regA_5
+
+eststo regA_6: reghdfe MajMethod highEdu skAuth_highEdu SkilledAuthority gender ${ParentsEducation} ${ParentsUrban}, absorb(CountryBirth MotherCountry FatherCountry) vce(r)
+est restore regA_6
+estadd ysumm		
+estadd local gender "$\checkmark$":regA_6
+estadd local CountryBirth "$\checkmark$":regA_6
+estadd local MotherCountry "$\checkmark$":regA_6
+estadd local FatherCountry "$\checkmark$":regA_6
+estadd local ParentsEducation "$\checkmark$":regA_6
+estadd local ParentsUrban "$\checkmark$":regA_6
+
+label var MajMethod "Majority Method"
+label var skAuth_math "Skilled Authority x Math Ability"
+label var skAuth_BA "Skilled Authority x Completed BA or More"
+label var skAuth_highEdu "Skilled Authority x Completed High School or More"
+
+estfe regA_1 regA_2 regA_3 regA_4 regA_5 regA_6
+esttab regA_1 regA_2 regA_3 regA_4 regA_5 regA_6 using Table2RE_inter_std.tex, ///
+	   replace label ///
+	   keep(math BA skAuth_math skAuth_BA highEdu skAuth_highEdu SkilledAuthority) noconstant nomtitle compress collabels(none) ///
+	   notes  b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///
+	   stats(gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban N r2, labels("Gender"  "Country of Birth FE" "Mother's Country FE" "Father's Country FE" "Parents' Educational Attainment" "Parents' Urban Controls" "Observations" "R-squared" ) ) ///
+	   order(math BA skAuth_math skAuth_BA highEdu skAuth_highEdu SkilledAuthority Gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban) ///
+	   mgroups("Majority Method", pattern(1 0 0 0 0 0) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span}))
+	   
