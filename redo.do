@@ -1069,7 +1069,7 @@ esttab regA_1 regA_2 regA_3 regA_4 regA_5 regA_6 using Table2RE.tex, ///
 	   order(math BA skAuth_math skAuth_BA highEdu skAuth_highEdu SkilledAuthority Gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban _cons) ///
 	   mgroups("Majority Method", pattern(1 0 0 0 0 0) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span}))
 	   
-*** Table 1:re ***
+*** Table 1:re & std(math BA highEdu) ***
 /*
 In this table, I manually delete the decimals of Observations and do some typesetting using overleaf.
 In overleaf, I do several things:
@@ -1087,7 +1087,7 @@ global ParentsUrban "FUrban MUrban"
 global ParentsEducation "FEdu MEdu" 
 
 //standardize the 2 variables
-local Standard "PreferDemo MajMethod"
+local Standard "PreferDemo MajMethod math BA highEdu"
 
 foreach var of local Standard{
 	egen std_`var'=std(`var')
@@ -1137,10 +1137,10 @@ label var MajMethod "Majority Method"
 estfe reg4b_1 reg4b_2 reg4b_3 reg4b_4
 esttab reg4b_1 reg4b_2 reg4b_3 reg4b_4 using Table1RE.tex, ///
 	   replace label /// 
-	   keep(MajMethod math BA highEdu _cons) nomtitle compress collabels(none) ///
+	   keep(MajMethod math BA highEdu) nomtitle noconstant compress collabels(none) ///
 	   notes b(3) se(3) star(* 0.1 ** 0.05 *** 0.01) ///
 	   stats(gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban N r2, labels("Gender"  "Country of Birth FE" "Mother's Country FE" "Father's Country FE" "Parents' Educational Attainment" "Parents' Urban Controls" "Observations" "R-squared" )) ///
-	   order(MajMethod math BA highEdu Gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban _cons) ///
+	   order(MajMethod math BA highEdu Gender CountryBirth MotherCountry FatherCountry ParentsEducation ParentsUrban) ///
 	   mgroups("Preference for Democracy", pattern(1 0 0 0) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span}))
 	   
 	   
